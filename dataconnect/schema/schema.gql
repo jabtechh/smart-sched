@@ -1,0 +1,57 @@
+type User @table {
+  displayName: String!
+  email: String!
+  createdAt: Timestamp!
+  photoUrl: String
+  timeZone: String
+}
+
+type Event @table {
+  user: User!
+  title: String!
+  startTime: Timestamp!
+  endTime: Timestamp!
+  category: Category!
+  createdAt: Timestamp!
+  description: String
+  location: String
+  isAllDay: Boolean
+  notificationTime: Timestamp
+}
+
+type Task @table {
+  user: User!
+  title: String!
+  dueDate: Timestamp!
+  estimatedDuration: Int!
+  priority: Int!
+  createdAt: Timestamp!
+  description: String
+  completedAt: Timestamp
+}
+
+type Preference @table {
+  user: User!
+  preferenceType: String!
+  value: String!
+  createdAt: Timestamp!
+  description: String
+}
+
+type Category @table {
+  user: User!
+  name: String!
+  createdAt: Timestamp!
+  colorCode: String
+  icon: String
+}
+
+type Availability @table {
+  user: User!
+  dayOfWeek: String!
+  startTime: Timestamp!
+  endTime: Timestamp!
+  availabilityType: String!
+  createdAt: Timestamp!
+  description: String
+}

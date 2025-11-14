@@ -1,0 +1,203 @@
+import { useEffect, useRef, useState } from 'react';
+import QRCode from 'qrcode';
+import QrScanner from 'qr-scanner';
+import { toast } from 'react-hot-toast';
+
+interface QRGeneratorProps {
+  data: string;
+  scale?: number;
+  className?: string;
+  color?: string;
+}
+
+export const QRGenerator = ({ data, scale = 8, className = '', color = '#297A20' }: QRGeneratorProps) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+
+    const generateQR = async () => {
+      try {
+        await QRCode.toCanvas(canvasRef.current, data, {
+          width: scale * 32,
+          margin: 2,
+          color: {
+            dark: color,
+            light: '#FFFFFF'
+          }
+        });
+      } catch (err) {
+        console.error('Error generating QR code:', err);
+        setError(err instanceof Error ? err.message : 'Failed to generate QR code');
+      }
+    };
+
+    generateQR();
+  }, [data, scale, color]);
+
+  if (error) {
+    return (
+      <div className="text-red-600 text-sm">
+        Failed to generate QR code: {error}
+      </div>
+    );
+  }
+
+  return (
+    <div className={`flex justify-center ${className}`}>
+      <canvas ref={canvasRef} />
+    </div>
+  );
+};
+
+interface QRScannerProps {
+  onScan: (result: string) => void;
+  onError?: (error: Error) => void;
+  className?: string;
+}
+
+export const QRScanner = ({ onScan, onError, className = '' }: QRScannerProps) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const scannerRef = useRef<QrScanner | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const setupScanner = async () => {
+      if (!videoRef.current || scannerRef.current) return;
+
+      try {
+        // Check if camera is available
+        const hasCamera = await QrScanner.hasCamera();
+        if (!hasCamera) {
+          throw new Error('No camera found on this device');
+        }
+
+        // Create scanner instance
+        const scanner = new QrScanner(
+          videoRef.current,
+          result => {
+            if (mounted) {
+              console.log('QR code found:', result.data);
+              toast.success('QR Code detected!');
+              onScan(result.data);
+            }
+          },
+          {
+            highlightScanRegion: true,
+            highlightCodeOutline: true,
+            calculateScanRegion: (video) => {
+              const smallestDimension = Math.min(video.videoWidth, video.videoHeight);
+              const scanRegionSize = Math.round(smallestDimension * 0.6);
+              
+              return {
+                x: Math.round((video.videoWidth - scanRegionSize) / 2),
+                y: Math.round((video.videoHeight - scanRegionSize) / 2),
+                width: scanRegionSize,
+                height: scanRegionSize,
+              };
+            },
+          }
+        );
+
+        // Set scanner reference for cleanup
+        scannerRef.current = scanner;
+
+        // Start scanning
+        await scanner.start();
+        
+        if (mounted) {
+          setIsScanning(true);
+          setError(null);
+        }
+
+      } catch (err) {
+        console.error('Scanner error:', err);
+        if (mounted) {
+          const message = err instanceof Error ? err.message : 'Failed to start scanner';
+          setError(message);
+          if (onError) onError(new Error(message));
+        }
+      }
+    };
+
+    setupScanner();
+
+    // Cleanup function
+    return () => {
+      mounted = false;
+      if (scannerRef.current) {
+        scannerRef.current.destroy();
+        scannerRef.current = null;
+      }
+    };
+  }, [onScan, onError]);
+
+  const handleRetry = async () => {
+    if (scannerRef.current) {
+      scannerRef.current.destroy();
+      scannerRef.current = null;
+    }
+    setError(null);
+    setIsScanning(false);
+    
+    // Re-run scanner setup
+    if (videoRef.current) {
+      try {
+        const scanner = new QrScanner(
+          videoRef.current,
+          result => {
+            console.log('QR code found:', result.data);
+            toast.success('QR Code detected!');
+            onScan(result.data);
+          },
+          {
+            highlightScanRegion: true,
+            highlightCodeOutline: true,
+          }
+        );
+        scannerRef.current = scanner;
+        await scanner.start();
+        setIsScanning(true);
+        setError(null);
+      } catch (err) {
+        console.error('Retry error:', err);
+        const message = err instanceof Error ? err.message : 'Failed to start scanner';
+        setError(message);
+        if (onError) onError(new Error(message));
+      }
+    }
+  };
+
+  if (error) {
+    return (
+      <div className="text-center p-4">
+        <div className="text-red-600 mb-4">{error}</div>
+        <button
+          onClick={handleRetry}
+          className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+        >
+          Retry Camera Access
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`relative ${className}`}>
+      <video
+        ref={videoRef}
+        className="w-full max-w-md mx-auto rounded-lg shadow-lg"
+      />
+      {isScanning && (
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 border-2 border-primary animate-pulse rounded-lg" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-2 border-primary-light rounded-lg" />
+        </div>
+      )}
+    </div>
+  );
+};

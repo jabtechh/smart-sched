@@ -1,0 +1,46 @@
+mutation CreateDemoUser @auth(level: PUBLIC, insecureReason: "This operation is used for demo purposes and does not require authentication") {
+  user_insert(data: {
+    id: "550e8400-e29b-41d4-a716-446655440000",
+    displayName: "demouser",
+    email: "demouser@example.com",
+    createdAt: "2024-03-15T12:00:00Z",
+    timeZone: "America/Los_Angeles"
+  })
+}
+
+query ListMyTasks @auth(level: USER) {
+  tasks(where: {userId: {eq_expr: "auth.uid"}}) {
+    id
+    title
+    description
+    dueDate
+    priority
+    completedAt
+  }
+}
+
+mutation CreateTask($title: String!, $description: String, $dueDate: Timestamp!, $estimatedDuration: Int!, $priority: Int!) @auth(level: USER) {
+  task_insert(data: {
+    userId_expr: "auth.uid",
+    title: $title,
+    description: $description,
+    dueDate: $dueDate,
+    estimatedDuration: $estimatedDuration,
+    priority: $priority,
+    createdAt_expr: "request.time"
+  })
+}
+
+mutation UpdateTask($id: UUID!, $title: String, $description: String, $dueDate: Timestamp, $estimatedDuration: Int, $priority: Int, $completedAt: Timestamp) @auth(level: USER) {
+  task_update(
+    key: {id: $id}
+    data: {
+      title: $title
+      description: $description
+      dueDate: $dueDate
+      estimatedDuration: $estimatedDuration
+      priority: $priority
+      completedAt: $completedAt
+    }
+  )
+}

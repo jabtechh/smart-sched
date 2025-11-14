@@ -1,0 +1,121 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    function isProfessor() {
+      return isAuthenticated() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'professor';
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Time window validation for check-ins (-10/+15 minutes)
+    function isWithinCheckInWindow(startTime) {
+      let now = request.time;
+      let checkInStart = duration.value(startTime) - duration.value(10 * 60, 's');
+      let checkInEnd = duration.value(startTime) + duration.value(15 * 60, 's');
+      return now >= checkInStart && now <= checkInEnd;
+    }
+
+    // Reservation conflict checking
+    function hasNoConflict(roomId, startAt, endAt, excludeId) {
+      let conflicts = getAfter(/databases/$(database)/documents/reservations)
+        .where('roomId', '==', roomId)
+        .where('status', 'in', ['SCHEDULED', 'IN_SESSION'])
+        .where('startAt', '<', endAt)
+        .where('endAt', '>', startAt);
+      
+      return !conflicts.hasAny() || (excludeId && conflicts.hasOnly([excludeId]));
+    }
+
+    // Users collection
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Rooms collection
+    match /rooms/{roomId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAdmin();
+      allow delete: if false;
+    }
+
+    // Reservations collection
+    match /reservations/{reservationId} {
+      allow read: if isAuthenticated() && 
+        (isAdmin() || isOwner(resource.data.userId));
+      
+      allow create: if isProfessor() && 
+        request.resource.data.userId == request.auth.uid &&
+        !get(/databases/$(database)/documents/rooms/$(request.resource.data.roomId)).data.isRetired &&
+        hasNoConflict(
+          request.resource.data.roomId,
+          request.resource.data.startAt,
+          request.resource.data.endAt,
+          null
+        );
+      
+      allow update: if isProfessor() && 
+        isOwner(resource.data.userId) &&
+        !resource.data.closed &&
+        (
+          // Allow status updates only for valid check-in/out operations
+          (
+            request.resource.data.status == 'IN_SESSION' &&
+            resource.data.status == 'SCHEDULED' &&
+            isWithinCheckInWindow(resource.data.startAt)
+          ) ||
+          (
+            request.resource.data.status == 'COMPLETED' &&
+            resource.data.status == 'IN_SESSION'
+          ) ||
+          // Allow time updates for scheduled reservations
+          (
+            request.resource.data.status == resource.data.status &&
+            resource.data.status == 'SCHEDULED' &&
+            hasNoConflict(
+              request.resource.data.roomId,
+              request.resource.data.startAt,
+              request.resource.data.endAt,
+              reservationId
+            )
+          )
+        );
+      
+      allow delete: if false;
+    }
+
+    // Faculty checkins collection
+    match /faculty_checkins/{checkinId} {
+      allow read: if isAuthenticated() && 
+        (isAdmin() || isOwner(resource.data.userId));
+      
+      allow create: if isProfessor() &&
+        request.resource.data.userId == request.auth.uid &&
+        exists(/databases/$(database)/documents/reservations/$(request.resource.data.reservationId));
+      
+      allow update, delete: if false;
+    }
+  }
+}
+      //
+      // Make sure to write security rules for your app before that time, or
+      // else all client requests to your database will be denied until you
+      // update your rules.
+      allow read, write: if request.time < timestamp.date(2025, 12, 8);
+    }
+  }
+}

@@ -1,0 +1,101 @@
+import { useState } from 'react';
+import { QRScanner } from '@/components/qr';
+import { useNavigate } from 'react-router-dom';
+import { getFirestore, doc, updateDoc, Timestamp, getDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { toast } from 'react-hot-toast';
+import { XCircleIcon } from '@heroicons/react/24/outline';
+
+const Scanner = () => {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const navigate = useNavigate();
+  const auth = getAuth();
+  const db = getFirestore();
+
+  const handleScan = async (qrData: string) => {
+    try {
+      setIsProcessing(true);
+      
+      // Validate professor is logged in
+      if (!auth.currentUser) {
+        throw new Error('You must be logged in to scan rooms');
+      }
+
+      // Parse QR data (expected format: room-{roomId})
+      if (!qrData.startsWith('room-')) {
+        throw new Error('Invalid QR code format');
+      }
+      const roomId = qrData.replace('room-', '');
+
+      // Get room document
+      const roomRef = doc(db, 'rooms', roomId);
+      const roomSnap = await getDoc(roomRef);
+
+      if (!roomSnap.exists()) {
+        throw new Error('Room not found');
+      }
+
+      // Record check-in
+      await updateDoc(roomRef, {
+        lastCheckedBy: auth.currentUser.uid,
+        lastCheckedAt: Timestamp.now(),
+        status: 'checked'  // You can adjust this status as needed
+      });
+
+      toast.success('Room check-in recorded successfully');
+      
+      // Navigate to room details or confirmation page
+      navigate(`/professor/rooms/${roomId}`);
+    } catch (error) {
+      console.error('Scan error:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to process scan');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleError = (error: Error) => {
+    console.error('Scanner error:', error);
+    toast.error('Failed to access camera. Please check permissions.');
+  };
+
+  return (
+    <div className="container mx-auto px-4 py-6">
+      <div className="max-w-md mx-auto">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="p-4 bg-primary text-white flex justify-between items-center">
+            <h1 className="text-xl font-semibold">Scan Room QR Code</h1>
+            <button
+              onClick={() => navigate(-1)}
+              className="text-white hover:text-gray-200"
+            >
+              <XCircleIcon className="w-6 h-6" />
+            </button>
+          </div>
+          
+          <div className="p-4">
+            {isProcessing ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+                <p className="mt-4 text-gray-600">Processing scan...</p>
+              </div>
+            ) : (
+              <>
+                <div className="mb-4 text-sm text-gray-600">
+                  Point your camera at a room's QR code to record your check-in.
+                </div>
+                <QRScanner
+                  onScan={handleScan}
+                  onError={handleError}
+                  className="mb-4"
+                />
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Scanner;
