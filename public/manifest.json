@@ -1,16 +1,19 @@
 {
+  "id": "https://smart-sched-ochre.vercel.app",
   "name": "SmartSched - Classroom Scheduling",
   "short_name": "SmartSched",
   "description": "Smart classroom scheduling and management system for scheduling rooms and managing reservations",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
   "orientation": "portrait-primary",
   "background_color": "#ffffff",
   "theme_color": "#297A20",
   "categories": ["productivity", "utilities"],
   "lang": "en-US",
   "dir": "ltr",
+  "iarc_rating_id": "e84b9d8f-f8c6-4ebc-95ad-d36d65d79f2e",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
@@ -79,5 +82,11 @@
       ]
     }
   ],
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.pateros.smartsched"
+    }
+  ]
 }
