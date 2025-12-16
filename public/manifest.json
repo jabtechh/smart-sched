@@ -1,19 +1,63 @@
 {
-  "name": "SmartSched",
+  "name": "SmartSched - Classroom Scheduling",
   "short_name": "SmartSched",
-  "description": "Smart classroom scheduling and management",
+  "description": "Smart classroom scheduling and management system for scheduling rooms and managing reservations",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#ffffff",
   "theme_color": "#297A20",
-  "scope": "/",
-  "orientation": "portrait",
+  "categories": ["productivity", "utilities"],
   "icons": [
     {
       "src": "/vite.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/assets/ptc_logo-BYSYHHCO.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/assets/ptc_logo-BYSYHHCO.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "form_factor": "narrow"
+    }
+  ],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Scan Room",
+      "short_name": "Scan",
+      "description": "Scan QR code to check in to a room",
+      "url": "/professor/scan",
+      "icons": [
+        {
+          "src": "/vite.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "View Reservations",
+      "short_name": "Reservations",
+      "description": "View and manage your reservations",
+      "url": "/prof/reservations",
+      "icons": [
+        {
+          "src": "/vite.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
     }
   ]
 }
