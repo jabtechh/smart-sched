@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import logo from '../assets/ptc_smartsched_logo_primary.png';
+import appLogo from '../assets/ptc_smartsched_logo_primary.png';
+import schoolLogo from '../assets/ptc_logo.jpg';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -80,11 +81,17 @@ export default function RegisterPage() {
   return (
     <div className="flex min-h-screen flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mb-8">
           <img
-            src={logo}
+            src={schoolLogo}
+            alt="School Logo"
+            className="h-24 w-auto sm:h-28"
+          />
+          <div className="hidden sm:block w-px h-24 bg-gray-300"></div>
+          <img
+            src={appLogo}
             alt="SmartSched Logo"
-            className="h-20 w-auto mb-6"
+            className="h-24 w-auto sm:h-28"
           />
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
