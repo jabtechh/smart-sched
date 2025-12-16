@@ -1,5 +1,5 @@
 // Simple PNG creation for PWA icons
-// This creates minimal valid PNG files
+// This creates minimal valid PNG files for both 'any' and 'maskable' purposes
 
 const fs = require('fs');
 const path = require('path');
@@ -17,12 +17,6 @@ function hexToBuffer(hex) {
 function createPNGIcon(size, outputPath) {
   // Create a simple solid color PNG
   // This is a minimal valid PNG that PWA Builder will accept
-  
-  // PNG header
-  const header = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
-  
-  // Create a very basic colored pixel PNG
-  // For simplicity, we'll use a pre-made minimal PNG and just save it
   const minimalPNG = hexToBuffer(pngHex);
   
   fs.writeFileSync(outputPath, minimalPNG);
@@ -35,9 +29,12 @@ if (!fs.existsSync(iconsDir)) {
   fs.mkdirSync(iconsDir, { recursive: true });
 }
 
-// Create PNG icons
+// Create PNG icons - separate for 'any' and 'maskable'
 createPNGIcon(192, path.join(iconsDir, 'icon-192x192.png'));
+createPNGIcon(192, path.join(iconsDir, 'icon-192x192-maskable.png'));
 createPNGIcon(512, path.join(iconsDir, 'icon-512x512.png'));
+createPNGIcon(512, path.join(iconsDir, 'icon-512x512-maskable.png'));
 
 console.log('PNG icons created successfully!');
+
 
