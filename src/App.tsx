@@ -6,12 +6,15 @@ import { Toaster } from 'react-hot-toast';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 import Layout from './components/layout/Layout';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 // Lazy load other pages
 const AdminRoomsPage = lazy(() => import('./pages/admin/RoomsPage'));
 const AdminRoomEditPage = lazy(() => import('./pages/admin/AdminRoomEditPage'));
 const RoomQRPage = lazy(() => import('./pages/admin/RoomQRPage'));
 const AdminReportsPage = lazy(() => import('./pages/admin/ReportsPage'));
+const UsersPage = lazy(() => import('./pages/admin/UsersPage'));
+const AdminUsersPage = lazy(() => import('./pages/admin/AdminUsersPage'));
 const ProfTodayPage = lazy(() => import('./pages/professor/TodayPage'));
 const ProfReservationsPage = lazy(() => import('./pages/professor/ReservationsPage'));
 const ProfReportsPage = lazy(() => import('./pages/professor/ReportsPage'));
@@ -27,6 +30,7 @@ function App() {
           <Routes>
             {/* Public routes */}
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
 
             {/* Default redirect */}
             <Route
@@ -34,7 +38,7 @@ function App() {
               element={
                 <Navigate
                   to={
-                    localStorage.getItem('userRole') === 'admin'
+                    localStorage.getItem('userRole') === 'super-admin' || localStorage.getItem('userRole') === 'admin'
                       ? '/admin/rooms'
                       : '/prof/today'
                   }
@@ -45,8 +49,28 @@ function App() {
 
             {/* Protected routes */}
             {/* Admin routes */}
-            <Route path="/admin/rooms" element={
+            <Route path="/admin/users" element={
+                <ProtectedRoute allowedRoles={['super-admin']}>
+                  <Layout>
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <UsersPage />
+                    </Suspense>
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/admin/professors" element={
                 <ProtectedRoute allowedRoles={['admin']}>
+                  <Layout>
+                    <Suspense fallback={<div>Loading...</div>}>
+                      <AdminUsersPage />
+                    </Suspense>
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/admin/rooms" element={
+                <ProtectedRoute allowedRoles={['super-admin', 'admin']}>
                   <Layout>
                     <Suspense fallback={<div>Loading...</div>}>
                       <AdminRoomsPage />
@@ -56,7 +80,7 @@ function App() {
               }
             />
             <Route path="/admin/rooms/:roomId/edit" element={
-                <ProtectedRoute allowedRoles={['admin']}>
+                <ProtectedRoute allowedRoles={['super-admin', 'admin']}>
                   <Layout>
                     <Suspense fallback={<div>Loading...</div>}>
                       <AdminRoomEditPage />
@@ -66,7 +90,7 @@ function App() {
               }
             />
             <Route path="/admin/rooms/:roomId/qr" element={
-                <ProtectedRoute allowedRoles={['admin']}>
+                <ProtectedRoute allowedRoles={['super-admin', 'admin']}>
                   <Layout>
                     <Suspense fallback={<div>Loading...</div>}>
                       <RoomQRPage />
@@ -78,7 +102,7 @@ function App() {
             <Route
               path="/admin/reports"
               element={
-                <ProtectedRoute allowedRoles={['admin']}>
+                <ProtectedRoute allowedRoles={['super-admin', 'admin']}>
                   <Layout>
                     <Suspense fallback={<div>Loading...</div>}>
                       <AdminReportsPage />

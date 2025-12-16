@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRoomContext } from '@/contexts/RoomContext';
-import QRCode from 'qrcode';
+import * as QRCode from 'qrcode';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import type { Room } from '../../types/room';

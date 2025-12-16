@@ -12,6 +12,7 @@ interface RoomScheduleWithRoom extends RoomSchedule {
     building: string;
     floor: string;
   };
+  professorName?: string;
 }
 
 interface ReservationFormData {
@@ -332,7 +333,7 @@ export default function ReservationsPage() {
               <button
                 onClick={() => setActiveTab('room-view')}
                 className={`${
-                  activeTab === 'room-schedules'
+                  activeTab === 'room-view'
                     ? 'border-primary text-primary'
                     : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-600'
                 } whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors`}
@@ -425,14 +426,18 @@ export default function ReservationsPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Course Code</label>
-                  <input
-                    type="text"
+                  <select
                     required
-                    placeholder="e.g., CS101"
                     value={formData.courseCode}
                     onChange={(e) => setFormData({ ...formData, courseCode: e.target.value })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-                  />
+                    className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                  >
+                    <option value="">Select a course</option>
+                    <option value="System Analysis and Design">System Analysis and Design</option>
+                    <option value="Database Management">Database Management</option>
+                    <option value="Capstone">Capstone</option>
+                    <option value="Introduction to Web Technological">Introduction to Web Technological</option>
+                  </select>
                 </div>
 
                 <div>

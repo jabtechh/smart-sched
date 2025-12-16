@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useRoomContext } from '../../contexts/RoomContext';
-import type { Room } from '../../types/room';
+import type { Room } from '../../contexts/types';
 
 interface RoomFormProps {
   open: boolean;
@@ -12,9 +12,9 @@ interface RoomFormProps {
 
 const defaultRoom = {
   name: '',
-  building: '',
-  floor: '',
-  capacity: 0,
+  building: 'MAIN BUILDING',
+  floor: '1st Floor',
+  capacity: 30,
   facilities: [],
   status: 'available' as const
 };
@@ -131,46 +131,35 @@ export default function RoomForm({ open, onClose, room }: RoomFormProps) {
                         <label htmlFor="building" className="block text-sm font-medium text-gray-700">
                           Building
                         </label>
-                        <input
-                          type="text"
-                          name="building"
+                        <select
                           id="building"
+                          name="building"
                           required
                           value={formData.building}
                           onChange={e => setFormData(prev => ({ ...prev, building: e.target.value }))}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-                        />
+                        >
+                          <option value="MAIN BUILDING">MAIN BUILDING</option>
+                        </select>
                       </div>
 
                       <div>
                         <label htmlFor="floor" className="block text-sm font-medium text-gray-700">
                           Floor
                         </label>
-                        <input
-                          type="text"
-                          name="floor"
+                        <select
                           id="floor"
+                          name="floor"
                           required
                           value={formData.floor}
                           onChange={e => setFormData(prev => ({ ...prev, floor: e.target.value }))}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="capacity" className="block text-sm font-medium text-gray-700">
-                          Capacity
-                        </label>
-                        <input
-                          type="number"
-                          name="capacity"
-                          id="capacity"
-                          required
-                          min="1"
-                          value={formData.capacity}
-                          onChange={e => setFormData(prev => ({ ...prev, capacity: parseInt(e.target.value) }))}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-                        />
+                        >
+                          <option value="1st Floor">1st Floor</option>
+                          <option value="2nd Floor">2nd Floor</option>
+                          <option value="3rd Floor">3rd Floor</option>
+                          <option value="4th Floor">4th Floor</option>
+                        </select>
                       </div>
 
                       <div>

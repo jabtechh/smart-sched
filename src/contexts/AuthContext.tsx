@@ -1,14 +1,15 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { 
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
   onAuthStateChanged,
   type User
 } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
 
-type UserRole = 'admin' | 'professor';
+type UserRole = 'super-admin' | 'admin' | 'professor';
 
 interface AuthUser {
   uid: string;
@@ -21,6 +22,7 @@ interface AuthContextType {
   user: AuthUser | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, displayName: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -100,6 +102,35 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const signUp = async (email: string, password: string, displayName: string) => {
+    console.log('Starting sign up for:', email);
+    const credential = await createUserWithEmailAndPassword(auth, email, password);
+    console.log('User created:', credential.user.uid);
+    
+    const userDocRef = doc(db, 'users', credential.user.uid);
+    
+    // New users get 'professor' role by default, admin can change it later in user management
+    const userData = {
+      email,
+      displayName,
+      role: 'professor' as UserRole,
+      createdAt: new Date(),
+      emailVerified: false,
+    };
+    
+    await setDoc(userDocRef, userData);
+    console.log('User document created in Firestore:', credential.user.uid);
+    
+    // Set user state with professor role
+    setUser({
+      uid: credential.user.uid,
+      email,
+      role: 'professor',
+      displayName,
+    });
+    localStorage.setItem('userRole', 'professor');
+  };
+
   const signOut = async () => {
     await firebaseSignOut(auth);
     setUser(null);
@@ -107,7 +138,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );

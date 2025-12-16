@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import ptcLogo from '../assets/ptc_logo.jpg';
 
@@ -18,13 +18,24 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       setError('');
+      
+      // Validation: prevent users from typing @pateros.edu.ph or .edu.ph
+      if (email.includes('@') || email.includes('.edu.ph')) {
+        setError('Username should not include @ or .edu.ph (it will be added automatically)');
+        return;
+      }
+      
+      if (!email.trim()) {
+        setError('Username is required');
+        return;
+      }
+      
       setLoading(true);
-      await signIn(email, password);
-      
+      // Auto-append @pateros.edu.ph domain
+      const fullEmail = `${email}@pateros.edu.ph`;
+      await signIn(fullEmail, password);
       const role = localStorage.getItem('userRole');
-      console.log('Role after sign in:', role);
-      
-      if (role === 'admin') {
+      if (role === 'super-admin' || role === 'admin') {
         navigate('/admin/rooms', { replace: true });
       } else if (role === 'professor') {
         navigate('/prof/today', { replace: true });
@@ -32,9 +43,8 @@ export default function LoginPage() {
         setError('Invalid user role');
       }
     } catch (err) {
-      console.error('Login error:', err);
       setError('Failed to sign in');
-      console.error(err);
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
@@ -53,6 +63,12 @@ export default function LoginPage() {
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
           Sign in to SmartSched
         </h2>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Don't have an account?{' '}
+          <Link to="/register" className="font-medium text-primary hover:text-primary-dark transition-colors">
+            Create one
+          </Link>
+        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -69,16 +85,22 @@ export default function LoginPage() {
                 Email address
               </label>
               <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
-                />
+                <div className="flex border border-gray-300 rounded-md shadow-sm focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+                  <input
+                    id="email"
+                    name="email"
+                    type="text"
+                    autoComplete="username"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="flex-1 px-3 py-2 placeholder-gray-400 focus:outline-none sm:text-sm border-0 bg-transparent"
+                    placeholder="john"
+                  />
+                  <div className="flex items-center px-3 py-2 text-gray-600 bg-white font-mono text-sm pointer-events-none select-none">
+                    @pateros.edu.ph
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -109,6 +131,22 @@ export default function LoginPage() {
                 {loading ? 'Signing in...' : 'Sign in'}
               </button>
             </div>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white px-2 text-gray-500">New to SmartSched?</span>
+              </div>
+            </div>
+
+            <Link
+              to="/register"
+              className="flex w-full justify-center rounded-md border border-primary bg-white px-4 py-2 text-sm font-medium text-primary shadow-sm hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
+            >
+              Create an account
+            </Link>
           </form>
         </div>
       </div>

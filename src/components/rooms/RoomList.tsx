@@ -55,9 +55,6 @@ export default function RoomList({ rooms, loading }: RoomListProps) {
               Floor
             </th>
             <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-              Capacity
-            </th>
-            <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
               Status
             </th>
             <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
@@ -73,8 +70,7 @@ export default function RoomList({ rooms, loading }: RoomListProps) {
               </td>
               <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{room.building}</td>
               <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{room.floor}</td>
-              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{room.capacity}</td>
-              <td className="whitespace-nowrap px-3 py-4 text-sm">
+              <td className="whitespace-nowrap pl-2 pr-0 py-4 text-sm">
                 <span
                   className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
                     room.status === 'available'

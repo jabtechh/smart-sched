@@ -35,7 +35,7 @@ const CheckInPage = () => {
                 
                 <div className="mb-8 aspect-square w-full max-w-sm mx-auto overflow-hidden rounded-lg shadow-lg">
                   <QRScanner
-                    onResult={handleScan}
+                    onScan={handleScan}
                     onError={handleError}
                     className="w-full h-full object-cover"
                   />

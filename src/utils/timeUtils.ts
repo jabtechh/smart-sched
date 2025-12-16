@@ -1,5 +1,4 @@
 import { addMinutes, subMinutes } from 'date-fns';
-import { zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
 
 const TIMEZONE = 'Asia/Manila';
 
@@ -13,14 +12,14 @@ export const AUTO_FINALIZE = {
   CHECKOUT_AFTER: 10,   // minutes
 };
 
-// Convert local time to UTC while preserving the timezone
+// Simple pass-through (Firebase Timestamps are already in server time)
 export const toUTC = (date: Date): Date => {
-  return zonedTimeToUtc(date, TIMEZONE);
+  return date;
 };
 
-// Convert UTC to local time with timezone
+// Simple pass-through
 export const fromUTC = (date: Date): Date => {
-  return utcToZonedTime(date, TIMEZONE);
+  return date;
 };
 
 // Check if current time is within the check-in window

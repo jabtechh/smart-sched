@@ -3,15 +3,15 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-config({ path: join(__dirname, '..', '.env') });
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, setDoc, doc, collection, getDoc, updateDoc } from 'firebase/firestore';
-import { initializeApp } from 'firebase/app';
 
-// Load environment variables
+// Load environment variables first
 const envPath = join(__dirname, '..', '.env');
 console.log('Loading environment variables from:', envPath);
 config({ path: envPath });
+
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, setDoc, doc, collection, getDoc, updateDoc } from 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
 
 // Validate environment variables
 const requiredEnvVars = [
@@ -109,14 +109,14 @@ async function createTestUsers() {
   try {
     // Set up admin user
     console.log('Setting up admin user...');
-    const adminUser = await getOrCreateUser('admin@example.com', 'adminpass123');
-    await ensureUserInFirestore(adminUser, 'admin', 'Admin User');
+    const adminUser = await getOrCreateUser('adminone@pateros.edu.ph', 'password123');
+    await ensureUserInFirestore(adminUser, 'admin', 'Admin One');
     console.log('Admin user setup complete');
 
     // Set up professor user
     console.log('Setting up professor user...');
-    const profUser = await getOrCreateUser('professor@example.com', 'profpass123');
-    await ensureUserInFirestore(profUser, 'professor', 'Professor User');
+    const profUser = await getOrCreateUser('profjohndoe@pateros.edu.ph', 'password123');
+    await ensureUserInFirestore(profUser, 'professor', 'John Doe');
     console.log('Professor user setup complete');
   } catch (error) {
     console.error('Error in createTestUsers:', error);
@@ -124,51 +124,51 @@ async function createTestUsers() {
   }
 }
 
-async function createTestRooms() {
-  const rooms = [
-    {
-      name: 'Room 101',
-      capacity: 30,
-      building: 'Main Building',
-      floor: '1st',
-      type: 'classroom'
-    },
-    {
-      name: 'Computer Lab 1',
-      capacity: 25,
-      building: 'Technology Building',
-      floor: '2nd',
-      type: 'laboratory'
-    },
-    {
-      name: 'Conference Room A',
-      capacity: 15,
-      building: 'Admin Building',
-      floor: '3rd',
-      type: 'conference'
-    }
-  ];
+// async function createTestRooms() {
+//   const rooms = [
+//     {
+//       name: 'Room 101',
+//       capacity: 30,
+//       building: 'Main Building',
+//       floor: '1st',
+//       type: 'classroom'
+//     },
+//     {
+//       name: 'Computer Lab 1',
+//       capacity: 25,
+//       building: 'Technology Building',
+//       floor: '2nd',
+//       type: 'laboratory'
+//     },
+//     {
+//       name: 'Conference Room A',
+//       capacity: 15,
+//       building: 'Admin Building',
+//       floor: '3rd',
+//       type: 'conference'
+//     }
+//   ];
 
-  for (const room of rooms) {
-    try {
-      const roomRef = doc(collection(db, 'rooms'));
-      await setDoc(roomRef, {
-        ...room,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      });
-      console.log(`Room ${room.name} created successfully`);
-    } catch (error) {
-      console.error(`Error creating room ${room.name}:`, error);
-    }
-  }
-}
+//   for (const room of rooms) {
+//     try {
+//       const roomRef = doc(collection(db, 'rooms'));
+//       await setDoc(roomRef, {
+//         ...room,
+//         createdAt: new Date(),
+//         updatedAt: new Date()
+//       });
+//       console.log(`Room ${room.name} created successfully`);
+//     } catch (error) {
+//       console.error(`Error creating room ${room.name}:`, error);
+//     }
+//   }
+// }
 
 // Run initialization
 async function initializeTestData() {
   console.log('Starting test data initialization...');
   await createTestUsers();
-  await createTestRooms();
+  // createTestRooms is commented out - rooms can be created manually via the admin UI
   console.log('Test data initialization complete!');
 }
 

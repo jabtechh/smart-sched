@@ -36,10 +36,10 @@ const ScannerPage = () => {
 
     // Find the closest matching schedule
     const currentSchedule = schedules.docs
-      .map(doc => ({ id: doc.id, ...doc.data() }))
-      .find(schedule => {
-        const startTime = schedule.startTime.toDate();
-        const endTime = schedule.endTime.toDate();
+      .map(doc => doc.data())
+      .find((schedule: any) => {
+        const startTime = (schedule.startTime as any).toDate?.() || schedule.startTime;
+        const endTime = (schedule.endTime as any).toDate?.() || schedule.endTime;
         const nowDate = now.toDate();
         
         // Allow early check-in if no other schedule exists

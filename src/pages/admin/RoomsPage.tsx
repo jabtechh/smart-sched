@@ -19,7 +19,16 @@ export default function RoomsPage() {
 
   // Fetch when filters change
   useEffect(() => {
-    fetchRooms(filters.building || filters.status ? filters : undefined);
+    const hasFilters = filters.building || filters.status;
+    if (hasFilters) {
+      const filterObj = {
+        ...(filters.building && { building: filters.building }),
+        ...(filters.status && { status: filters.status as 'available' | 'occupied' | 'maintenance' })
+      };
+      fetchRooms(Object.keys(filterObj).length > 0 ? filterObj : undefined);
+    } else {
+      fetchRooms(undefined);
+    }
   }, [fetchRooms, filters]);
 
   const buildings = Array.from(new Set((rooms || []).map(room => room.building))).sort();

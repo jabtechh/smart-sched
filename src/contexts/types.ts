@@ -11,10 +11,10 @@ export interface Room {
   type?: string;
   lastCheckin?: {
     professorId: string;
-    timestamp: Date;
+    timestamp: Timestamp;
   };
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }
 
 export interface Reservation {

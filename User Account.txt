@@ -1,0 +1,21 @@
+Test User Accounts (Created with npm run init-test-data)
+
+Super Administrator: superadmin@pateros.edu.ph - Password: password123
+Administrator: admin@pateros.edu.ph - Password: password123
+Professor: professor@pateros.edu.ph - Password: password123
+
+All accounts require @pateros.edu.ph email domain
+
+✅ Promote to Admin - Promote any professor to admin with one click
+✅ Archive Professors - Soft delete inactive professors
+✅ Restore Professors - Restore archived professors back to active
+
+Key Differences from Super Admin View:
+Super Admin (/admin/users): Sees all users (professors, admins, super admins)
+Regular Admin (/admin/professors): Sees only professors
+Super Admin can: Assign any role including super admin
+Regular Admin can: Only promote professors to admin
+Navigation for Admins:
+Admins now see: Professors, Rooms, Reports
+The "Professors" link is the first item for easy access
+Try logging in as ad

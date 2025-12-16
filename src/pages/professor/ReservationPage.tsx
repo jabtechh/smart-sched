@@ -4,7 +4,7 @@ import { getAuth } from 'firebase/auth';
 import { format, parseISO, addWeeks } from 'date-fns';
 import { toast } from 'react-hot-toast';
 import { PlusIcon, CalendarIcon, ClockIcon, BuildingOfficeIcon } from '@heroicons/react/24/outline';
-import { Room } from '@/types/room';
+import type { Room } from '@/types/room';
 
 interface RoomSchedule {
   id: string;
@@ -214,7 +214,7 @@ export default function ReservationPage() {
           ) : (
             <ul className="divide-y divide-gray-200">
               {schedules.map((schedule) => (
-                <li key={schedule.id} className="px-4 py-4 sm:px-6">
+                <li key={schedule.id} className="px-4 py-4 sm:px-6 hover:bg-gray-50 transition-colors cursor-pointer">
                   <div className="flex items-center justify-between">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center">
@@ -279,14 +279,18 @@ export default function ReservationPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Course Code</label>
-                  <input
-                    type="text"
+                  <select
                     required
-                    placeholder="e.g., CS101"
                     value={formData.courseCode}
                     onChange={(e) => setFormData({ ...formData, courseCode: e.target.value })}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-                  />
+                    className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                  >
+                    <option value="">Select a course</option>
+                    <option value="System Analysis and Design">System Analysis and Design</option>
+                    <option value="Database Management">Database Management</option>
+                    <option value="Capstone">Capstone</option>
+                    <option value="Introduction to Web Technological">Introduction to Web Technological</option>
+                  </select>
                 </div>
 
                 <div>
@@ -358,3 +362,4 @@ export default function ReservationPage() {
       )}
     </div>
   );
+}
