@@ -28,7 +28,14 @@ export default defineConfig({
   },
   build: {
     commonjsOptions: {
-      include: [/qr-scanner/, /react/, /use-sync-external-store/, /headlessui/, /qrcode/, /rgbcolor/, /canvg/, /raf/, /html2canvas/]
+      include: [/node_modules/],
+      transformMixedEsModules: true,
+      esmExternals: true
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
     }
   },
   css: {
