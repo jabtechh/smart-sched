@@ -2,6 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile-first responsive design */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  font-size: 16px; /* Prevents zoom on input focus in iOS */
+}
+
+/* Ensure proper mobile scaling */
+@media (max-width: 640px) {
+  body {
+    font-size: 16px;
+  }
+  
+  input, textarea, select {
+    font-size: 16px;
+  }
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
