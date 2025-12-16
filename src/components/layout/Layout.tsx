@@ -3,7 +3,7 @@ import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import ptcLogo from '../../assets/ptc_logo.jpg';
+import logo from '../../assets/ptc_smartsched_logo_primary.png';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -108,8 +108,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className="flex items-center">
                   <Link to="/" className="flex-shrink-0 flex items-center">
                     <img
-                      src={ptcLogo}
-                      alt="PTC Logo"
+                      src={logo}
+                      alt="SmartSched Logo"
                       className="h-8 w-auto mr-2"
                     />
                     <span className="text-xl font-bold text-primary">SmartSched</span>
@@ -175,8 +175,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex h-16 flex-shrink-0 items-center px-4">
             <Link to="/" className="flex items-center">
               <img
-                src={ptcLogo}
-                alt="PTC Logo"
+                src={logo}
+                alt="SmartSched Logo"
                 className="h-8 w-auto mr-2"
               />
               <span className="text-xl font-bold text-primary">SmartSched</span>

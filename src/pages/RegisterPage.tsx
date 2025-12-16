@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import ptcLogo from '../assets/ptc_logo.jpg';
+import logo from '../assets/ptc_smartsched_logo_primary.png';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -82,8 +82,8 @@ export default function RegisterPage() {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <img
-            src={ptcLogo}
-            alt="PTC Logo"
+            src={logo}
+            alt="SmartSched Logo"
             className="h-20 w-auto mb-6"
           />
         </div>

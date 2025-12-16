@@ -5,6 +5,7 @@ import { RoomProvider } from './contexts/RoomContext';
 import { Toaster } from 'react-hot-toast';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 import Layout from './components/layout/Layout';
+import LoadingScreen from './components/layout/LoadingScreen';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 
@@ -24,6 +25,7 @@ const ScannerPage = lazy(() => import('./pages/professor/ScannerPage'));
 function App() {
   return (
     <BrowserRouter>
+      <LoadingScreen />
       <AuthProvider>
         <RoomProvider>
           <Toaster position="top-right" />
