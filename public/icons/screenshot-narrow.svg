@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 720">
+  <rect fill="#f3f4f6" width="540" height="720"/>
+  <rect fill="#297A20" width="540" height="80"/>
+  <text x="270" y="50" font-size="28" font-weight="bold" fill="white" text-anchor="middle" font-family="system-ui, Arial, sans-serif">SmartSched</text>
+  <text x="30" y="180" font-size="24" font-weight="bold" fill="#111827" font-family="system-ui, Arial, sans-serif">Schedule &amp; Manage</text>
+  <text x="30" y="240" font-size="18" fill="#6b7280" font-family="system-ui, Arial, sans-serif">Scan QR codes, reserve rooms,</text>
+  <text x="30" y="270" font-size="18" fill="#6b7280" font-family="system-ui, Arial, sans-serif">and manage your schedule</text>
+  <rect x="30" y="350" width="480" height="100" fill="#dbeafe" rx="10"/>
+  <text x="270" y="390" font-size="16" font-weight="bold" fill="#0c4a6e" text-anchor="middle" font-family="system-ui, Arial, sans-serif">✓ QR Scanner</text>
+  <text x="270" y="420" font-size="16" font-weight="bold" fill="#0c4a6e" text-anchor="middle" font-family="system-ui, Arial, sans-serif">✓ Room Reservations</text>
+  <text x="270" y="450" font-size="16" font-weight="bold" fill="#0c4a6e" text-anchor="middle" font-family="system-ui, Arial, sans-serif">✓ Real-time Check-In</text>
+</svg>

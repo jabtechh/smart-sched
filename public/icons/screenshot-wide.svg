@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+  <rect fill="#f3f4f6" width="1280" height="720"/>
+  <rect fill="#297A20" width="1280" height="80"/>
+  <text x="640" y="50" font-size="32" font-weight="bold" fill="white" text-anchor="middle" font-family="system-ui, Arial, sans-serif">SmartSched - Classroom Scheduling</text>
+  <text x="60" y="180" font-size="28" font-weight="bold" fill="#111827" font-family="system-ui, Arial, sans-serif">Features</text>
+  <text x="60" y="240" font-size="20" fill="#374151" font-family="system-ui, Arial, sans-serif">✓ QR Code Scanner  ✓ Room Reservations  ✓ Check-In System</text>
+  <text x="60" y="280" font-size="20" fill="#374151" font-family="system-ui, Arial, sans-serif">✓ Analytics &amp; Reports  ✓ Real-time Updates  ✓ Mobile Optimized</text>
+  <rect x="60" y="350" width="1160" height="300" fill="#dbeafe" rx="15"/>
+  <text x="640" y="420" font-size="24" font-weight="bold" fill="#0c4a6e" text-anchor="middle" font-family="system-ui, Arial, sans-serif">Designed for Educational Excellence</text>
+  <text x="640" y="480" font-size="18" fill="#0c4a6e" text-anchor="middle" font-family="system-ui, Arial, sans-serif">Streamline your classroom management with smart scheduling</text>
+  <text x="640" y="530" font-size="18" fill="#0c4a6e" text-anchor="middle" font-family="system-ui, Arial, sans-serif">Available on Web, Android, and iOS</text>
+</svg>

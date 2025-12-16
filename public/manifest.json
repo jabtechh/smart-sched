@@ -13,15 +13,16 @@
   "categories": ["productivity", "utilities"],
   "lang": "en-US",
   "dir": "ltr",
+  "iarc_rating_id": "e84b9d8f-f8c6-4ebc-95ad-d36d65d79f2e",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23297A20' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>SS</text></svg>",
+      "src": "/icons/icon-192x192.svg",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23297A20' width='512' height='512'/><text x='50%' y='50%' font-size='250' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>SS</text></svg>",
+      "src": "/icons/icon-512x512.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
@@ -29,20 +30,25 @@
   ],
   "screenshots": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%23f3f4f6' width='540' height='720'/><rect fill='%23297A20' width='540' height='60'/><text x='270' y='40' font-size='24' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>SmartSched</text><text x='20' y='150' font-size='20' fill='%23111827' font-weight='bold'>Schedule &amp; Manage</text><text x='20' y='200' font-size='16' fill='%236b7280'>Scan QR codes, reserve rooms, and manage your schedule efficiently</text></svg>",
+      "src": "/icons/screenshot-narrow.svg",
       "sizes": "540x720",
       "type": "image/svg+xml",
       "form_factor": "narrow"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720'><rect fill='%23f3f4f6' width='1280' height='720'/><rect fill='%23297A20' width='1280' height='60'/><text x='640' y='40' font-size='24' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>SmartSched - Smart Classroom Scheduling</text><text x='50' y='150' font-size='20' fill='%23111827' font-weight='bold'>Features</text><text x='50' y='200' font-size='16' fill='%236b7280'>✓ QR Code Scanner  ✓ Room Reservations  ✓ Check-In System  ✓ Reports &amp; Analytics</text></svg>",
+      "src": "/icons/screenshot-wide.svg",
       "sizes": "1280x720",
       "type": "image/svg+xml",
       "form_factor": "wide"
     }
   ],
   "prefer_related_applications": false,
-  "related_applications": [],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.pateros.smartsched"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Scan Room",
@@ -51,7 +57,7 @@
       "url": "/professor/scan",
       "icons": [
         {
-          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23297A20' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>QR</text></svg>",
+          "src": "/icons/icon-192x192.svg",
           "sizes": "192x192",
           "type": "image/svg+xml"
         }
@@ -64,7 +70,7 @@
       "url": "/prof/reservations",
       "icons": [
         {
-          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23297A20' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>📅</text></svg>",
+          "src": "/icons/icon-192x192.svg",
           "sizes": "192x192",
           "type": "image/svg+xml"
         }
@@ -81,6 +87,17 @@
       "url": "url"
     }
   },
+  "scope_extensions": [
+    {
+      "origin": "https://*.pateros.edu.ph"
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+smartsched",
+      "url": "/?qr=%s"
+    }
+  ],
   "launch_handler": {
     "client_mode": ["navigate-new", "auto"]
   },
@@ -92,11 +109,32 @@
       },
       "icons": [
         {
-          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23297A20' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>📄</text></svg>",
+          "src": "/icons/icon-192x192.svg",
           "sizes": "192x192",
           "type": "image/svg+xml"
         }
       ]
     }
-  ]
+  ],
+  "widgets": [
+    {
+      "name": "SmartSched Schedule",
+      "short_name": "Schedule",
+      "description": "Quick access to your schedule",
+      "tag": "smartsched-schedule",
+      "screenshots": [
+        {
+          "src": "/icons/screenshot-narrow.svg",
+          "sizes": "540x720",
+          "type": "image/svg+xml",
+          "form_factor": "narrow"
+        }
+      ],
+      "data": "{}",
+      "screenshots": []
+    }
+  ],
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
 }
