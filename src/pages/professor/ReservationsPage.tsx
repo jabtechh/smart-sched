@@ -202,9 +202,15 @@ export default function ReservationsPage() {
         recurringType: formData.recurringType
       });
 
+      // Get room name
+      const roomDoc = await getDoc(doc(db, 'rooms', formData.roomId));
+      const roomData = roomDoc.data() as Room;
+      const roomName = roomData?.name || 'Unknown Room';
+
       // Create schedule
       const scheduleRef = await addDoc(collection(db, 'roomSchedules'), {
         roomId: formData.roomId,
+        roomName: roomName,
         professorId: auth.currentUser.uid,
         courseCode: formData.courseCode,
         startTime: Timestamp.fromDate(startDateTime),
@@ -225,6 +231,7 @@ export default function ReservationsPage() {
           
           return addDoc(collection(db, 'roomSchedules'), {
             roomId: formData.roomId,
+            roomName: roomName,
             professorId: auth.currentUser.uid,
             courseCode: formData.courseCode,
             startTime: Timestamp.fromDate(futureStart),
@@ -357,43 +364,55 @@ export default function ReservationsPage() {
               No reservations found. Click "New Reservation" to create one.
             </div>
           ) : (
-            <ul className="divide-y divide-gray-200">
-              {schedules.map((schedule) => (
-                <li key={schedule.id} className="px-4 py-4 sm:px-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center">
-                        <BuildingOfficeIcon className="h-5 w-5 text-gray-400 mr-2" />
-                        <p className="text-sm font-medium text-primary truncate">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room & Course</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {schedules.map((schedule) => {
+                    const startDate = schedule.startTime.toDate();
+                    const endDate = schedule.endTime.toDate();
+                    const durationMs = endDate.getTime() - startDate.getTime();
+                    const durationHours = Math.floor(durationMs / (1000 * 60 * 60));
+                    const durationMinutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+                    const durationStr = durationHours > 0 ? `${durationHours}h ${durationMinutes}m` : `${durationMinutes}m`;
+
+                    return (
+                      <tr key={schedule.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                           {schedule.room?.name} - {schedule.courseCode}
-                        </p>
-                      </div>
-                      <div className="mt-2 flex items-center text-sm text-gray-500">
-                        <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5" />
-                        <p>
-                          {format(schedule.startTime.toDate(), 'EEEE, MMMM d, yyyy')}
-                        </p>
-                      </div>
-                      <div className="mt-2 flex items-center text-sm text-gray-500">
-                        <ClockIcon className="flex-shrink-0 mr-1.5 h-5 w-5" />
-                        <p>
-                          {format(schedule.startTime.toDate(), 'h:mm a')} - {format(schedule.endTime.toDate(), 'h:mm a')}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="ml-4 flex-shrink-0">
-                      <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
-                        schedule.status === 'completed' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-blue-100 text-blue-800'
-                      }`}>
-                        {schedule.status}
-                      </span>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {format(startDate, 'MMM d, yyyy')}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {format(startDate, 'h:mm a')} - {format(endDate, 'h:mm a')}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {durationStr}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
+                            schedule.status === 'completed' 
+                              ? 'bg-green-100 text-green-800' 
+                              : 'bg-blue-100 text-blue-800'
+                          }`}>
+                            {schedule.status}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       ) : (

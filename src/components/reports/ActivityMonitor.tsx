@@ -13,6 +13,7 @@ interface ActivityLog {
   duration?: number; // in minutes, for check-outs
   building?: string;
   floor?: string;
+  scheduledStartTime?: Date; // for check-ins
   scheduledEndTime?: Date; // for check-ins
 }
 
@@ -59,8 +60,9 @@ export default function ActivityMonitor() {
             console.error('Error fetching professor:', err);
           }
 
-          // Fetch course code and scheduled end time
+          // Fetch course code and scheduled times
           let courseCode: string | undefined;
+          let scheduledStartTime: Date | undefined;
           let scheduledEndTime: Date | undefined;
           try {
             const schedulesRef = collection(db, 'roomSchedules');
@@ -86,6 +88,7 @@ export default function ActivityMonitor() {
               
               if (schedule) {
                 courseCode = schedule.courseCode;
+                scheduledStartTime = schedule.startTime.toDate();
                 scheduledEndTime = schedule.endTime.toDate();
               }
             }
@@ -103,6 +106,7 @@ export default function ActivityMonitor() {
             timestamp: checkInTime,
             building: data.building,
             floor: data.floor,
+            scheduledStartTime,
             scheduledEndTime,
           });
 
@@ -215,8 +219,8 @@ export default function ActivityMonitor() {
                       {activity.type === 'check-in' ? (
                         <>
                           <p>Checked in at: {format(activity.timestamp, 'h:mm a')}</p>
-                          {activity.scheduledEndTime && (
-                            <p>Scheduled until: {format(activity.scheduledEndTime, 'h:mm a')}</p>
+                          {activity.scheduledStartTime && activity.scheduledEndTime && (
+                            <p>Reservation: {format(activity.scheduledStartTime, 'h:mm a')}-{format(activity.scheduledEndTime, 'h:mm a')}</p>
                           )}
                         </>
                       ) : (

@@ -114,6 +114,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email,
       displayName,
       role: 'professor' as UserRole,
+      status: 'active',
       createdAt: new Date(),
       emailVerified: false,
     };

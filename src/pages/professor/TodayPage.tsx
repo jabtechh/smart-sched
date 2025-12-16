@@ -232,13 +232,13 @@ export default function TodayPage() {
                 <h3 className="text-xl font-semibold">{activeCheckIn.roomName}</h3>
                 <p className="text-gray-600">{activeCheckIn.building}, Floor {activeCheckIn.floor}</p>
                 <div className="mt-2 space-y-2">
-                  {activeCheckIn.scheduledEndTime && (
+                  {activeCheckIn.scheduledStartTime && activeCheckIn.scheduledEndTime && (
                     <p className="text-sm text-gray-600">
-                      <span className="font-medium">Scheduled:</span> until {format(activeCheckIn.scheduledEndTime, 'h:mm a')}
+                      <span className="font-medium">Reservation:</span> {format(activeCheckIn.scheduledStartTime, 'h:mm a')}-{format(activeCheckIn.scheduledEndTime, 'h:mm a')}
                     </p>
                   )}
                   <p className="text-sm text-gray-500">
-                    <span className="font-medium">Checked in:</span> {format(activeCheckIn.checkInTime, 'h:mm a')}
+                    <span className="font-medium">Checked in at:</span> {format(activeCheckIn.checkInTime, 'h:mm a')}
                   </p>
                 </div>
                 {activeCheckIn.scheduledEndTime && (
