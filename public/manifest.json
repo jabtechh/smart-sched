@@ -6,14 +6,12 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui", "browser"],
   "orientation": "portrait-primary",
   "background_color": "#ffffff",
   "theme_color": "#297A20",
   "categories": ["productivity", "utilities"],
   "lang": "en-US",
   "dir": "ltr",
-  "iarc_rating_id": "e84b9d8f-f8c6-4ebc-95ad-d36d65d79f2e",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
