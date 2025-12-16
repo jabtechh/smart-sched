@@ -1,37 +1,48 @@
 {
+  "id": "/",
   "name": "SmartSched - Classroom Scheduling",
   "short_name": "SmartSched",
   "description": "Smart classroom scheduling and management system for scheduling rooms and managing reservations",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
   "orientation": "portrait-primary",
   "background_color": "#ffffff",
   "theme_color": "#297A20",
   "categories": ["productivity", "utilities"],
+  "lang": "en-US",
+  "dir": "ltr",
   "icons": [
     {
-      "src": "/vite.svg",
-      "sizes": "any",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23297A20' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>SS</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23297A20' width='512' height='512'/><text x='50%' y='50%' font-size='250' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>SS</text></svg>",
+      "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ],
   "screenshots": [
     {
-      "src": "/assets/ptc_logo-BYSYHHCO.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg",
-      "form_factor": "wide"
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%23f3f4f6' width='540' height='720'/><rect fill='%23297A20' width='540' height='60'/><text x='270' y='40' font-size='24' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>SmartSched</text><text x='20' y='150' font-size='20' fill='%23111827' font-weight='bold'>Schedule &amp; Manage</text><text x='20' y='200' font-size='16' fill='%236b7280'>Scan QR codes, reserve rooms, and manage your schedule efficiently</text></svg>",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
     },
     {
-      "src": "/assets/ptc_logo-BYSYHHCO.jpg",
-      "sizes": "192x192",
-      "type": "image/jpeg",
-      "form_factor": "narrow"
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1280 720'><rect fill='%23f3f4f6' width='1280' height='720'/><rect fill='%23297A20' width='1280' height='60'/><text x='640' y='40' font-size='24' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>SmartSched - Smart Classroom Scheduling</text><text x='50' y='150' font-size='20' fill='%23111827' font-weight='bold'>Features</text><text x='50' y='200' font-size='16' fill='%236b7280'>✓ QR Code Scanner  ✓ Room Reservations  ✓ Check-In System  ✓ Reports &amp; Analytics</text></svg>",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "form_factor": "wide"
     }
   ],
   "prefer_related_applications": false,
+  "related_applications": [],
   "shortcuts": [
     {
       "name": "Scan Room",
@@ -40,8 +51,8 @@
       "url": "/professor/scan",
       "icons": [
         {
-          "src": "/vite.svg",
-          "sizes": "any",
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23297A20' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>QR</text></svg>",
+          "sizes": "192x192",
           "type": "image/svg+xml"
         }
       ]
@@ -53,8 +64,36 @@
       "url": "/prof/reservations",
       "icons": [
         {
-          "src": "/vite.svg",
-          "sizes": "any",
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23297A20' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>📅</text></svg>",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "launch_handler": {
+    "client_mode": ["navigate-new", "auto"]
+  },
+  "file_handlers": [
+    {
+      "action": "/open-file",
+      "accept": {
+        "text/csv": [".csv"]
+      },
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23297A20' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dominant-baseline='central' font-weight='bold'>📄</text></svg>",
+          "sizes": "192x192",
           "type": "image/svg+xml"
         }
       ]
